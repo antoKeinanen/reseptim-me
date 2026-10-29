@@ -16,6 +16,9 @@ h1 { font-size: 40px; letter-spacing: -1.2px; }
 .site-header { display: flex; align-items: center; justify-content: space-between; gap: 24px; padding-block: 52px 54px; }
 .brand { display: flex; align-items: center; gap: 10px; text-decoration: none; font-size: 27px; font-weight: 600; letter-spacing: -.5px; }
 .brand img { flex: none; object-fit: contain; }
+.site-nav { display: flex; gap: 20px; color: var(--muted); font-family: var(--sans); font-size: 15px; }
+.site-nav a { text-decoration: none; }
+.site-nav a:hover { color: var(--text); text-decoration: underline; text-underline-offset: 4px; }
 .search-field { display: flex; align-items: center; gap: 14px; padding: 15px 18px; border: 1px solid var(--rule); border-radius: 5px; font-family: var(--sans); }
 .search-field:focus-within { border-color: var(--accent); }
 .search-field svg { color: var(--muted); flex: none; }
@@ -70,6 +73,7 @@ h1 { font-size: 40px; letter-spacing: -1.2px; }
   .site-header { padding-block: 30px 42px; gap: 16px; }
   .brand { font-size: 23px; gap: 7px; }
   .brand img { width: 64px; height: 64px; }
+  .site-nav { gap: 12px; font-size: 14px; }
   h1 { font-size: 33px; letter-spacing: -.8px; }
   .search-field { padding: 13px; gap: 10px; }
   .search-field input { font-size: 15px; }

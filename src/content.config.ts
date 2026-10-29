@@ -10,8 +10,10 @@ const recipes = defineCollection({
 		category: z.enum(['starter', 'main', 'dessert', 'other']),
 		portions: z.number().positive(),
 		diet: z.array(z.string()),
-		cost: z.number().nonnegative(),
-		dateOfCost: z.iso.date(),
+		cost: z.number().nonnegative().nullable(),
+		dateOfCost: z.iso.date().nullable(),
+	}).refine(({ cost, dateOfCost }) => (cost === null) === (dateOfCost === null), {
+		message: 'Cost and dateOfCost must both be set or both be null.',
 	}),
 });
 

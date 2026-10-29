@@ -26,7 +26,7 @@ const recipes = (await getCollection('recipes')).sort((a, b) => a.data.name.loca
   <ul class="recipe-grid">
     {recipes.map((recipe) => {
       const { name, author, category, portions, diet, cost, dateOfCost } = recipe.data;
-      const metadata = [name, author, category, categoryLabels[category], portions, portions.toLocaleString('fi-FI'), ...diet, ...diet.map(getDietLabel), cost, formatRecipeCost(cost), dateOfCost, formatRecipeDate(dateOfCost)].join(' ');
+      const metadata = [name, author, category, categoryLabels[category], portions, portions.toLocaleString('fi-FI'), ...diet, ...diet.map(getDietLabel), cost, cost === null ? '' : formatRecipeCost(cost), dateOfCost, dateOfCost ? formatRecipeDate(dateOfCost) : ''].join(' ');
       return <li data-recipe-search={metadata}><a class="recipe-card" href={`/recipes/${getRecipeSlug(recipe)}/`}><h2>{name}</h2><RecipeMetadata data={recipe.data} compact /></a></li>;
     })}
   </ul>

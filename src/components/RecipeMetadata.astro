@@ -13,6 +13,6 @@ const categoryLabel = categoryLabels[category];
   {!compact && <div class="metadata-author"><dt>Reseptin tekijä</dt><dd>{author || 'Ei tiedossa'}</dd></div>}
 </dl>
 {!compact && <dl class="recipe-metadata metadata-pricing">
-  <div class="metadata-cost"><dt>Hinta</dt><dd>{formatRecipeCost(cost)}</dd></div>
-  <div class="metadata-date"><dt>Hinnan päiväys</dt><dd><time datetime={dateOfCost}>{formatRecipeDate(dateOfCost)}</time></dd></div>
+  <div class="metadata-cost"><dt>Hinta</dt><dd>{cost === null ? 'Ei tiedossa' : formatRecipeCost(cost)}</dd></div>
+  <div class="metadata-date"><dt>Hinnan päiväys</dt><dd>{dateOfCost ? <time datetime={dateOfCost}>{formatRecipeDate(dateOfCost)}</time> : 'Ei tiedossa'}</dd></div>
 </dl>}
