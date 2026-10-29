@@ -8,21 +8,21 @@ cost: 12
 dateOfCost: "2026-10-29"
 ---
 
-| Ingredient | Amount | Unit | Note |
-| --- | --- | --- | --- |
-| Soijasuikaleita | 1 | pussi | |
-| Kasvikermaa | 0,5 | l | |
-| Sipulia | 2 | | |
-| Öljyä | | | |
-| Kasvisliemikuutiota | 1-2 | | |
-| Marsalaa | 2 | dl | Vegaanista löytyy Alkosta, mutta se pitää tarkistaa valmistajan sivuilta |
-| Soijakastiketta | 2 | rkl | |
-| Rakuunaa | | | |
-| Suolaa | | | |
-| Pastaa | | | Lisukkeeksi haluamaasi pastaa, esim. spagettia |
-| MSG | | | Halutessasi maun mukaan |
-| Sieniä | | | Halutessasi maun mukaan |
-| Tuoretta rakuunaa | | | Pinnalle |
+| Ingredient          | Amount | Unit  | Note                                                                     |
+| ------------------- | ------ | ----- | ------------------------------------------------------------------------ |
+| Soijasuikaleita     | 1      | pussi |                                                                          |
+| Kasvikermaa         | 0,5    | l     |                                                                          |
+| Sipulia             | 2      |       |                                                                          |
+| Öljyä               |        |       |                                                                          |
+| Kasvisliemikuutiota | 1-2    |       |                                                                          |
+| Marsalaa            | 2      | dl    | Vegaanista löytyy Alkosta, mutta se pitää tarkistaa valmistajan sivuilta |
+| Soijakastiketta     | 2      | rkl   |                                                                          |
+| Rakuunaa            |        |       |                                                                          |
+| Suolaa              |        |       |                                                                          |
+| Pastaa              |        |       | Lisukkeeksi haluamaasi pastaa, esim. spagettia                           |
+| MSG                 |        |       | Halutessasi maun mukaan                                                  |
+| Sieniä              |        |       | Halutessasi maun mukaan                                                  |
+| Tuoretta rakuunaa   |        |       | Pinnalle                                                                 |
 
 ## Valmistus
 
@@ -33,7 +33,3 @@ dateOfCost: "2026-10-29"
 5. Lisää pannulle soijasuikaleet ja kerma, hämmennä.
 6. Lisää soija, rakuuna ja haluamasi höysteet.
 7. Tarjoile. Halutessasi paksumman kastikkeen, suurusta.
-
-## Arviot
-
-Annosmäärä ja 12 euron kokonaishinta ovat arvioita. Hinta on arvioitu 29.10.2026.
