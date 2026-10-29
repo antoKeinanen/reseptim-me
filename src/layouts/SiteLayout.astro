@@ -1,0 +1,28 @@
+---
+import '../styles/global.css';
+type Props = { title?: string };
+const { title } = Astro.props;
+---
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width" />
+    <meta name="generator" content={Astro.generator} />
+    <meta name="theme-color" content="#000000" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <title>{title ? `${title} | reseptim.me` : 'reseptim.me'}</title>
+  </head>
+  <body>
+    <a class="skip-link" href="#main">Skip to content</a>
+    <div class="site-shell">
+      <header class="site-header">
+        <a class="brand" href="/" aria-label="reseptim.me home">
+          <img src="/favicon.svg" alt="TKO-äly" width="72" height="72" />
+          <span>reseptim.me</span>
+        </a>
+      </header>
+      <main id="main"><slot /></main>
+    </div>
+  </body>
+</html>

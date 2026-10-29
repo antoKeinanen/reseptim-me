@@ -1,0 +1,16 @@
+---
+import type { CollectionEntry } from 'astro:content';
+type Props = { data: CollectionEntry<'recipes'>['data']; compact?: boolean };
+const { data, compact = false } = Astro.props;
+const { category, portions, diet, cost, dateOfCost } = data;
+const categoryLabel = category.charAt(0).toUpperCase() + category.slice(1);
+---
+<dl class:list={['recipe-metadata', { 'metadata-compact': compact }]}>
+  <div class="metadata-category"><dt>Category</dt><dd>{categoryLabel}</dd></div>
+  <div class="metadata-portions"><dt>Portions</dt><dd>{portions}{compact && ` ${portions === 1 ? 'portion' : 'portions'}`}</dd></div>
+  <div class="metadata-diet"><dt>Diet</dt><dd>{diet.length ? diet.join(', ') : 'No dietary tags'}</dd></div>
+  {!compact && <>
+    <div class="metadata-cost"><dt>Cost</dt><dd>{cost.toLocaleString('en', { maximumFractionDigits: 2 })}</dd></div>
+    <div class="metadata-date"><dt>Date of cost</dt><dd><time datetime={dateOfCost}>{dateOfCost}</time></dd></div>
+  </>}
+</dl>

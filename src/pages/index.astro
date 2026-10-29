@@ -1,89 +1,62 @@
 ---
 import { getCollection } from 'astro:content';
 import { getRecipeSlug } from '../lib/recipes';
-
-const recipes = (await getCollection('recipes')).sort((a, b) =>
-	a.data.name.localeCompare(b.data.name, 'en'),
-);
+import SiteLayout from '../layouts/SiteLayout.astro';
+import RecipeMetadata from '../components/RecipeMetadata.astro';
+const recipes = (await getCollection('recipes')).sort((a, b) => a.data.name.localeCompare(b.data.name, 'en'));
 ---
-
-<html lang="en">
-	<head>
-		<meta charset="utf-8" />
-		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-		<link rel="icon" href="/favicon.ico" />
-		<meta name="viewport" content="width=device-width" />
-		<meta name="generator" content={Astro.generator} />
-		<title>Recipes</title>
-	</head>
-	<body>
-		<main>
-			<h1>Recipes</h1>
-			<label for="recipe-search">Search recipes</label>
-			<input id="recipe-search" type="search" aria-describedby="search-help" />
-			<p id="search-help">
-				Search by name, category, portions, diet, cost, or date of cost.
-				Use multiple words to match all of them, in any order.
-			</p>
-			<p id="recipe-count" role="status">
-				{recipes.length} {recipes.length === 1 ? 'recipe' : 'recipes'}
-			</p>
-			<p id="no-results" hidden={recipes.length > 0}>No recipes found.</p>
-			<ul>
-				{recipes.map((recipe) => {
-					const { name, category, portions, diet, cost, dateOfCost } = recipe.data;
-					const metadata = [name, category, portions, ...diet, cost, dateOfCost].join(' ');
-
-					return (
-						<li data-recipe-search={metadata}>
-							<h2><a href={`/recipes/${getRecipeSlug(recipe)}/`}>{name}</a></h2>
-							<dl>
-								<dt>Category</dt>
-								<dd>{category}</dd>
-								<dt>Portions</dt>
-								<dd>{portions}</dd>
-								<dt>Diet</dt>
-								<dd>{diet.length > 0 ? diet.join(', ') : 'None'}</dd>
-								<dt>Cost</dt>
-								<dd>{cost}</dd>
-								<dt>Date of cost</dt>
-								<dd><time datetime={dateOfCost}>{dateOfCost}</time></dd>
-							</dl>
-						</li>
-					);
-				})}
-			</ul>
-		</main>
-	</body>
-</html>
-
+<SiteLayout>
+  <h1 class="visually-hidden">Recipes</h1>
+  <div class="search-area">
+    <label for="recipe-search" class="visually-hidden">Search recipes</label>
+    <div class="search-field">
+      <svg viewBox="0 0 24 24" width="23" height="23" fill="none" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5" stroke="currentColor" stroke-width="1.6"/><path d="m15.5 15.5 5 5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+      <input id="recipe-search" type="search" placeholder="Search recipes and their details" aria-describedby="search-help" />
+      <button id="clear-search" class="clear-search" type="button" hidden aria-label="Clear search">Clear</button>
+    </div>
+    <p id="search-help">Search by name, category, portions, diet, cost, or date. Combine words to narrow your search.</p>
+  </div>
+  <p id="recipe-count" class="visually-hidden" role="status">{recipes.length} recipes</p>
+  <div id="no-results" class="empty-results" hidden={recipes.length > 0}>
+    <h2>{recipes.length ? 'No recipes found' : 'No recipes yet'}</h2>
+    <p>{recipes.length ? 'Try fewer words or a category such as main.' : 'Recipes will appear here when they are added.'}</p>
+    <button id="reset-search" type="button" class="text-button" hidden={recipes.length === 0}>Show all recipes</button>
+  </div>
+  <ul class="recipe-grid">
+    {recipes.map((recipe) => {
+      const { name, category, portions, diet, cost, dateOfCost } = recipe.data;
+      const metadata = [name, category, portions, ...diet, cost, dateOfCost].join(' ');
+      return <li data-recipe-search={metadata}><a class="recipe-card" href={`/recipes/${getRecipeSlug(recipe)}/`}><h2>{name}</h2><RecipeMetadata data={recipe.data} compact /></a></li>;
+    })}
+  </ul>
+</SiteLayout>
 <script>
-	const search = document.querySelector<HTMLInputElement>('#recipe-search');
-	const count = document.querySelector<HTMLParagraphElement>('#recipe-count');
-	const noResults = document.querySelector<HTMLParagraphElement>('#no-results');
-
-	function normalizeSearch(value: string): string {
-		return value.normalize('NFKD').replace(/\p{M}/gu, '').toLowerCase();
-	}
-
-	const recipes = Array.from(document.querySelectorAll<HTMLLIElement>('[data-recipe-search]'), (item) => ({
-		item,
-		metadata: normalizeSearch(item.dataset.recipeSearch ?? ''),
-	}));
-
-	if (search && count && noResults) {
-		search.addEventListener('input', () => {
-			const terms = normalizeSearch(search.value).trim().split(/\s+/).filter(Boolean);
-			let matches = 0;
-
-			for (const recipe of recipes) {
-				const matchesSearch = terms.every((term) => recipe.metadata.includes(term));
-				recipe.item.hidden = !matchesSearch;
-				if (matchesSearch) matches += 1;
-			}
-
-			count.textContent = `${matches} ${matches === 1 ? 'recipe' : 'recipes'}`;
-			noResults.hidden = matches > 0;
-		});
-	}
+  const search = document.querySelector<HTMLInputElement>('#recipe-search');
+  const count = document.querySelector<HTMLElement>('#recipe-count');
+  const noResults = document.querySelector<HTMLElement>('#no-results');
+  const clear = document.querySelector<HTMLButtonElement>('#clear-search');
+  const reset = document.querySelector<HTMLButtonElement>('#reset-search');
+  function normalizeSearch(value: string): string {
+    return value.normalize('NFKD').replace(/\p{M}/gu, '').toLowerCase();
+  }
+  const recipes = Array.from(document.querySelectorAll<HTMLLIElement>('[data-recipe-search]'), (item) => ({ item, metadata: normalizeSearch(item.dataset.recipeSearch ?? '') }));
+  if (search && count && noResults && clear && reset) {
+    const update = () => {
+      const terms = normalizeSearch(search.value).trim().split(/\s+/).filter(Boolean);
+      let matches = 0;
+      for (const recipe of recipes) {
+        const matched = terms.every((term) => recipe.metadata.includes(term));
+        recipe.item.hidden = !matched;
+        if (matched) matches += 1;
+      }
+      count.textContent = `${matches} ${matches === 1 ? 'recipe' : 'recipes'}`;
+      noResults.hidden = matches > 0;
+      clear.hidden = search.value.length === 0;
+    };
+    const clearSearch = () => { search.value = ''; update(); search.focus(); };
+    search.addEventListener('input', update);
+    clear.addEventListener('click', clearSearch);
+    reset.addEventListener('click', clearSearch);
+    update();
+  }
 </script>

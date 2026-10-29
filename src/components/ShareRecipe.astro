@@ -1,0 +1,40 @@
+<a class="share-button" id="share-recipe" href="https://t.me/share/url" target="_blank" rel="noreferrer" hidden>
+  <svg viewBox="0 0 24 24" width="18" height="18" fill="none" aria-hidden="true"><path d="m21 3-7 18-4-7-7-4L21 3Z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/><path d="m10 14 6-6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+  Share to Telegram
+</a>
+<script>
+  const telegram = document.querySelector<HTMLAnchorElement>('#share-recipe');
+  const source = document.querySelector<HTMLElement>('[data-share-source]');
+
+  function messageText(node: Node): string {
+    if (node.nodeType === Node.TEXT_NODE) return (node.textContent ?? '').replace(/\s+/g, ' ');
+    if (!(node instanceof HTMLElement) || node.matches('[data-share-exclude], script, style, button, dialog, nav')) return '';
+    if (node.matches('dl')) {
+      return Array.from(node.children, (item) =>
+        `${item.querySelector('dt')?.textContent ?? ''}: ${item.querySelector('dd')?.textContent ?? ''}`
+      ).join('\n') + '\n\n';
+    }
+    if (node instanceof HTMLImageElement) return node.alt;
+    if (node.matches('br')) return '\n';
+    if (node.matches('pre')) return `${node.textContent ?? ''}\n\n`;
+    const text = Array.from(node.childNodes, messageText).join('');
+    if (node.matches('li')) {
+      const list = node.parentElement;
+      const prefix = list instanceof HTMLOListElement
+        ? `${Array.from(list.children).indexOf(node) + list.start}. `
+        : '• ';
+      return `${prefix}${text.trim()}\n`;
+    }
+    if (node.matches('.ingredient-line')) return `${text.trim()}\n`;
+    if (node.matches('h1, h2, h3, h4, h5, h6, p, ol, ul, blockquote, .ingredient-lines')) return `${text.trim()}\n\n`;
+    return text;
+  }
+
+  if (telegram && source) {
+    const shareUrl = new URL('https://t.me/share/url');
+    shareUrl.searchParams.set('url', new URL(window.location.pathname, window.location.origin).href);
+    shareUrl.searchParams.set('text', messageText(source).replace(/[\t ]*\n[\t ]*/g, '\n').replace(/\n{3,}/g, '\n\n').trim());
+    telegram.href = shareUrl.href;
+    telegram.hidden = false;
+  }
+</script>

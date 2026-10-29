@@ -57,6 +57,7 @@ dateOfCost: "2026-10-29"
 ```
 
 Keep all four ingredient table columns. Leave `Amount`, `Unit`, or `Note` cells blank when they do not apply.
+The site displays one plain text line per ingredient, including its quantity and note when provided.
 Write the instructions after the table using any Markdown.
 
 Astro derives the URL from `name`, independently of the filename.
@@ -65,4 +66,9 @@ Names become lowercase, accents are removed, and punctuation and spaces become h
 Names must produce unique, nonempty slugs. Invalid frontmatter or conflicting slugs fail the build.
 Changing a recipe's name changes its URL.
 
-The included recipes and their costs are mock data.
+## Share a recipe
+
+On a recipe page, select **Share to Telegram** to open Telegram with a prepared plain text message.
+The message includes the recipe name, metadata, ingredients, instructions, and current page URL.
+Choose a chat in Telegram to send the message.
+Sharing requires JavaScript. Reading recipes does not.
