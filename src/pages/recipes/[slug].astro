@@ -24,13 +24,13 @@ const editUrl = `https://github.com/antoKeinanen/reseptim-me/edit/main/${recipe.
   <div class="recipe-page">
     <article data-share-source>
       <header class="recipe-heading">
-        <h1 class="visually-hidden">{recipe.data.name}</h1>
+        <h1>{recipe.data.name}</h1>
         <RecipeMetadata data={recipe.data} />
       </header>
       <div class="recipe-body"><Content /></div>
       <div class="recipe-actions" data-share-exclude>
         <ShareRecipe />
-        <a class="share-button" href={editUrl} target="_blank" rel="noreferrer">Suggest an edit</a>
+        <a class="share-button" href={editUrl} target="_blank" rel="noreferrer">Ehdota muutosta</a>
       </div>
     </article>
   </div>

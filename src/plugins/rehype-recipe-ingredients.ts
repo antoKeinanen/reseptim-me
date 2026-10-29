@@ -45,7 +45,7 @@ function ingredientSection(table: Element): Element | undefined {
 		children: [
 			{
 				type: 'element', tagName: 'h2', properties: { id: 'ingredients' },
-				children: [{ type: 'text', value: 'Ingredients' }],
+				children: [{ type: 'text', value: 'Ainekset' }],
 			},
 			{ type: 'element', tagName: 'div', properties: { className: ['ingredient-lines'] }, children: items },
 		],

@@ -21,7 +21,7 @@ Pages live in `src/pages/`. Static assets live in `public/`.
 ## Find a recipe
 
 The home page lists all recipes alphabetically and links to their pages.
-Search matches name, category, portions, dietary tags, cost, and date of cost.
+Search matches name, author, category, portions, dietary tags, cost, and date of cost.
 Every search word must match somewhere in the recipe's metadata.
 Search ignores capitalization and accents. Numbers and dates match as text.
 Clear the search to show all recipes. Filtering requires JavaScript.
@@ -29,7 +29,8 @@ Clear the search to show all recipes. Filtering requires JavaScript.
 ## Add a recipe
 
 Create a `.md` file in `recipes/` with the following format.
-All frontmatter fields are required. Use `starter`, `main`, `dessert`, or `other` for `category`.
+All frontmatter fields except `author` are required. Use `starter`, `main`, `dessert`, or `other` for `category`.
+Set `author` to the original recipe creator's name. Leave it blank or omit it when the creator is unknown.
 Use a positive number for `portions`, an array of strings for `diet`, and a nonnegative number for `cost`.
 Use `[]` when no dietary tags apply. Cost has no assumed currency.
 Quote `dateOfCost` and use a valid date in `YYYY-MM-DD` format.
@@ -37,6 +38,7 @@ Quote `dateOfCost` and use a valid date in `YYYY-MM-DD` format.
 ```markdown
 ---
 name: Tomato pasta
+author: ""
 category: main
 portions: 2
 diet: []

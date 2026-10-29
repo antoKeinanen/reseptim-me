@@ -1,31 +1,32 @@
 ---
 import { getCollection } from 'astro:content';
 import { getRecipeSlug } from '../lib/recipes';
+import { categoryLabels, getDietLabel, formatRecipeCost, formatRecipeDate } from '../lib/recipe-labels';
 import SiteLayout from '../layouts/SiteLayout.astro';
 import RecipeMetadata from '../components/RecipeMetadata.astro';
-const recipes = (await getCollection('recipes')).sort((a, b) => a.data.name.localeCompare(b.data.name, 'en'));
+const recipes = (await getCollection('recipes')).sort((a, b) => a.data.name.localeCompare(b.data.name, 'fi'));
 ---
 <SiteLayout>
-  <h1 class="visually-hidden">Recipes</h1>
+  <h1 class="visually-hidden">Reseptit</h1>
   <div class="search-area">
-    <label for="recipe-search" class="visually-hidden">Search recipes</label>
+    <label for="recipe-search" class="visually-hidden">Hae reseptejä</label>
     <div class="search-field">
       <svg viewBox="0 0 24 24" width="23" height="23" fill="none" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5" stroke="currentColor" stroke-width="1.6"/><path d="m15.5 15.5 5 5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
-      <input id="recipe-search" type="search" placeholder="Search recipes and their details" aria-describedby="search-help" />
-      <button id="clear-search" class="clear-search" type="button" hidden aria-label="Clear search">Clear</button>
+      <input id="recipe-search" type="search" placeholder="Hae reseptejä ja niiden tietoja" aria-describedby="search-help" />
+      <button id="clear-search" class="clear-search" type="button" hidden aria-label="Tyhjennä haku">Tyhjennä</button>
     </div>
-    <p id="search-help">Search by name, category, portions, diet, cost, or date. Combine words to narrow your search.</p>
+    <p id="search-help">Hae nimellä, tekijällä, ruokalajilla, annosmäärällä, ruokavaliolla, hinnalla tai päivämäärällä. Rajaa hakua yhdistämällä hakusanoja.</p>
   </div>
-  <p id="recipe-count" class="visually-hidden" role="status">{recipes.length} recipes</p>
+  <p id="recipe-count" class="visually-hidden" role="status">{recipes.length} {recipes.length === 1 ? 'resepti' : 'reseptiä'}</p>
   <div id="no-results" class="empty-results" hidden={recipes.length > 0}>
-    <h2>{recipes.length ? 'No recipes found' : 'No recipes yet'}</h2>
-    <p>{recipes.length ? 'Try fewer words or a category such as main.' : 'Recipes will appear here when they are added.'}</p>
-    <button id="reset-search" type="button" class="text-button" hidden={recipes.length === 0}>Show all recipes</button>
+    <h2>{recipes.length ? 'Reseptejä ei löytynyt' : 'Ei reseptejä vielä'}</h2>
+    <p>{recipes.length ? 'Kokeile vähemmän hakusanoja tai ruokalajia, kuten pääruoka.' : 'Uudet reseptit ilmestyvät tänne, kun ne lisätään.'}</p>
+    <button id="reset-search" type="button" class="text-button" hidden={recipes.length === 0}>Näytä kaikki reseptit</button>
   </div>
   <ul class="recipe-grid">
     {recipes.map((recipe) => {
-      const { name, category, portions, diet, cost, dateOfCost } = recipe.data;
-      const metadata = [name, category, portions, ...diet, cost, dateOfCost].join(' ');
+      const { name, author, category, portions, diet, cost, dateOfCost } = recipe.data;
+      const metadata = [name, author, category, categoryLabels[category], portions, portions.toLocaleString('fi-FI'), ...diet, ...diet.map(getDietLabel), cost, formatRecipeCost(cost), dateOfCost, formatRecipeDate(dateOfCost)].join(' ');
       return <li data-recipe-search={metadata}><a class="recipe-card" href={`/recipes/${getRecipeSlug(recipe)}/`}><h2>{name}</h2><RecipeMetadata data={recipe.data} compact /></a></li>;
     })}
   </ul>
@@ -49,7 +50,7 @@ const recipes = (await getCollection('recipes')).sort((a, b) => a.data.name.loca
         recipe.item.hidden = !matched;
         if (matched) matches += 1;
       }
-      count.textContent = `${matches} ${matches === 1 ? 'recipe' : 'recipes'}`;
+      count.textContent = `${matches} ${matches === 1 ? 'resepti' : 'reseptiä'}`;
       noResults.hidden = matches > 0;
       clear.hidden = search.value.length === 0;
     };

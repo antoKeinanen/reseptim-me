@@ -6,6 +6,7 @@ const recipes = defineCollection({
 	loader: glob({ pattern: '*.md', base: './recipes' }),
 	schema: z.object({
 		name: z.string().trim().min(1),
+		author: z.string().trim().default(''),
 		category: z.enum(['starter', 'main', 'dessert', 'other']),
 		portions: z.number().positive(),
 		diet: z.array(z.string()),

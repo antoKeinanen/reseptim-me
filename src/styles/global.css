@@ -37,6 +37,8 @@ h1 { font-size: 40px; letter-spacing: -1.2px; }
 .recipe-metadata:not(.metadata-compact) > div { display: inline-flex; flex-wrap: wrap; align-items: baseline; gap: 4px 8px; max-width: 100%; padding: 6px 13px; border: 1px solid var(--rule); border-radius: 999px; }
 .recipe-metadata dt { color: var(--muted); font-size: 14px; }
 .recipe-metadata dd { overflow-wrap: anywhere; }
+.metadata-pricing { margin-top: 8px; }
+.recipe-heading h1 { margin-bottom: 24px; overflow-wrap: anywhere; }
 .metadata-compact { display: flex; flex-wrap: wrap; gap: 4px 16px; font-size: 14px; color: var(--muted); }
 .metadata-compact > div { display: block; }
 .metadata-compact .metadata-diet { flex-basis: 100%; }
