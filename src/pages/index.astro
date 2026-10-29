@@ -1,4 +1,10 @@
 ---
+import { getCollection } from 'astro:content';
+import { getRecipeSlug } from '../lib/recipes';
+
+const recipes = (await getCollection('recipes')).sort((a, b) =>
+	a.data.name.localeCompare(b.data.name, 'en'),
+);
 ---
 
 <html lang="en">
@@ -8,9 +14,76 @@
 		<link rel="icon" href="/favicon.ico" />
 		<meta name="viewport" content="width=device-width" />
 		<meta name="generator" content={Astro.generator} />
-		<title>Astro</title>
+		<title>Recipes</title>
 	</head>
 	<body>
-		<h1>Astro</h1>
+		<main>
+			<h1>Recipes</h1>
+			<label for="recipe-search">Search recipes</label>
+			<input id="recipe-search" type="search" aria-describedby="search-help" />
+			<p id="search-help">
+				Search by name, category, portions, diet, cost, or date of cost.
+				Use multiple words to match all of them, in any order.
+			</p>
+			<p id="recipe-count" role="status">
+				{recipes.length} {recipes.length === 1 ? 'recipe' : 'recipes'}
+			</p>
+			<p id="no-results" hidden={recipes.length > 0}>No recipes found.</p>
+			<ul>
+				{recipes.map((recipe) => {
+					const { name, category, portions, diet, cost, dateOfCost } = recipe.data;
+					const metadata = [name, category, portions, ...diet, cost, dateOfCost].join(' ');
+
+					return (
+						<li data-recipe-search={metadata}>
+							<h2><a href={`/recipes/${getRecipeSlug(recipe)}/`}>{name}</a></h2>
+							<dl>
+								<dt>Category</dt>
+								<dd>{category}</dd>
+								<dt>Portions</dt>
+								<dd>{portions}</dd>
+								<dt>Diet</dt>
+								<dd>{diet.length > 0 ? diet.join(', ') : 'None'}</dd>
+								<dt>Cost</dt>
+								<dd>{cost}</dd>
+								<dt>Date of cost</dt>
+								<dd><time datetime={dateOfCost}>{dateOfCost}</time></dd>
+							</dl>
+						</li>
+					);
+				})}
+			</ul>
+		</main>
 	</body>
 </html>
+
+<script>
+	const search = document.querySelector<HTMLInputElement>('#recipe-search');
+	const count = document.querySelector<HTMLParagraphElement>('#recipe-count');
+	const noResults = document.querySelector<HTMLParagraphElement>('#no-results');
+
+	function normalizeSearch(value: string): string {
+		return value.normalize('NFKD').replace(/\p{M}/gu, '').toLowerCase();
+	}
+
+	const recipes = Array.from(document.querySelectorAll<HTMLLIElement>('[data-recipe-search]'), (item) => ({
+		item,
+		metadata: normalizeSearch(item.dataset.recipeSearch ?? ''),
+	}));
+
+	if (search && count && noResults) {
+		search.addEventListener('input', () => {
+			const terms = normalizeSearch(search.value).trim().split(/\s+/).filter(Boolean);
+			let matches = 0;
+
+			for (const recipe of recipes) {
+				const matchesSearch = terms.every((term) => recipe.metadata.includes(term));
+				recipe.item.hidden = !matchesSearch;
+				if (matchesSearch) matches += 1;
+			}
+
+			count.textContent = `${matches} ${matches === 1 ? 'recipe' : 'recipes'}`;
+			noResults.hidden = matches > 0;
+		});
+	}
+</script>

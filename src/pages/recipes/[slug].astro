@@ -1,0 +1,51 @@
+---
+import { getCollection, render, type CollectionEntry } from 'astro:content';
+import { getRecipeSlug } from '../../lib/recipes';
+
+export async function getStaticPaths() {
+	const recipes = await getCollection('recipes');
+	const slugs = new Set<string>();
+
+	return recipes.map((recipe) => {
+		const slug = getRecipeSlug(recipe);
+		if (slugs.has(slug)) {
+			throw new Error(`Duplicate recipe slug "${slug}". Recipe names must produce unique URLs.`);
+		}
+		slugs.add(slug);
+
+		return { params: { slug }, props: { recipe } };
+	});
+}
+
+type Props = { recipe: CollectionEntry<'recipes'> };
+
+const { recipe } = Astro.props;
+const { name, category, portions, diet, cost, dateOfCost } = recipe.data;
+const { Content } = await render(recipe);
+---
+
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width" />
+		<title>{name}</title>
+	</head>
+	<body>
+		<main>
+			<h1>{name}</h1>
+			<dl>
+				<dt>Category</dt>
+				<dd>{category}</dd>
+				<dt>Portions</dt>
+				<dd>{portions}</dd>
+				<dt>Diet</dt>
+				<dd>{diet.join(', ')}</dd>
+				<dt>Cost</dt>
+				<dd>{cost}</dd>
+				<dt>Date of cost</dt>
+				<dd><time datetime={dateOfCost}>{dateOfCost}</time></dd>
+			</dl>
+			<Content />
+		</main>
+	</body>
+</html>
