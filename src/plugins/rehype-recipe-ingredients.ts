@@ -27,10 +27,21 @@ function ingredientSection(table: Element): Element | undefined {
 		.filter((row) => row.tagName === 'tr')
 		.map((row): Element => {
 			const [ingredient, amount, unit, note] = elementChildren(row);
-			const parts = [amount, unit, ingredient].filter((cell): cell is Element =>
+			const fixed = /\bper\b|annosta kohti|annosta kohden|\/\s*annos/i.test(note ? textContent(note) : '')
+				|| /\bosa(?:a)?\b/i.test([amount, unit].map((cell) => cell ? textContent(cell) : '').join(' '));
+			const quantity: Element | undefined = amount && {
+				type: 'element', tagName: 'span',
+				properties: fixed ? {} : { 'data-ingredient-amount': '' },
+				children: unit && textContent(unit).trim()
+					? [...amount.children, { type: 'text', value: ' ' }, ...unit.children]
+					: amount.children,
+			};
+			const parts = [quantity, ingredient].filter((cell): cell is Element =>
 				cell !== undefined && textContent(cell).trim().length > 0);
-			const children: ElementContent[] = parts.flatMap((cell, index) =>
-				index === 0 ? cell.children : [{ type: 'text', value: ' ' }, ...cell.children]);
+			const children: ElementContent[] = parts.flatMap((cell, index) => {
+				const content = cell === quantity ? [cell] : cell.children;
+				return index === 0 ? content : [{ type: 'text', value: ' ' }, ...content];
+			});
 			if (note && textContent(note).trim()) {
 				children.push({ type: 'text', value: ', ' }, ...note.children);
 			}

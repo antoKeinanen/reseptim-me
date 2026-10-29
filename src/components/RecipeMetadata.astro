@@ -1,6 +1,7 @@
 ---
 import type { CollectionEntry } from 'astro:content';
 import { categoryLabels, getDietLabel, formatRecipeCost, formatRecipeDate } from '../lib/recipe-labels';
+import PortionScaler from './PortionScaler.astro';
 type Props = { data: CollectionEntry<'recipes'>['data']; compact?: boolean };
 const { data, compact = false } = Astro.props;
 const { author, category, portions, diet, cost, dateOfCost } = data;
@@ -8,7 +9,7 @@ const categoryLabel = categoryLabels[category];
 ---
 <dl class:list={['recipe-metadata', { 'metadata-compact': compact }]}>
   <div class="metadata-category"><dt>Ruokalaji</dt><dd>{categoryLabel}</dd></div>
-  <div class="metadata-portions"><dt>Annoksia</dt><dd>{portions.toLocaleString('fi-FI')}{compact && ` ${portions === 1 ? 'annos' : 'annosta'}`}</dd></div>
+  <div class="metadata-portions"><dt>Annoksia</dt><dd>{compact ? `${portions.toLocaleString('fi-FI')} ${portions === 1 ? 'annos' : 'annosta'}` : <PortionScaler portions={portions} />}</dd></div>
   <div class="metadata-diet"><dt>Ruokavalio</dt><dd>{diet.length ? diet.map(getDietLabel).join(', ') : 'Ei ruokavaliotietoja'}</dd></div>
   {!compact && <div class="metadata-author"><dt>Reseptin tekijä</dt><dd>{author || 'Ei tiedossa'}</dd></div>}
 </dl>

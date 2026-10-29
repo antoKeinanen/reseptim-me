@@ -11,7 +11,7 @@
     if (!(node instanceof HTMLElement) || node.matches('[data-share-exclude], script, style, button, dialog, nav')) return '';
     if (node.matches('dl')) {
       return Array.from(node.children, (item) =>
-        `${item.querySelector('dt')?.textContent ?? ''}: ${item.querySelector('dd')?.textContent ?? ''}`
+        `${item.querySelector('dt')?.textContent ?? ''}: ${Array.from(item.querySelector('dd')?.childNodes ?? [], messageText).join('').trim()}`
       ).join('\n') + '\n\n';
     }
     if (node instanceof HTMLImageElement) return node.alt;
@@ -30,11 +30,14 @@
     return text;
   }
 
-  if (telegram && source) {
+  function updateShareUrl() {
+    if (!telegram || !source) return;
     const shareUrl = new URL('https://t.me/share/url');
     shareUrl.searchParams.set('url', new URL(window.location.pathname, window.location.origin).href);
     shareUrl.searchParams.set('text', messageText(source).replace(/[\t ]*\n[\t ]*/g, '\n').replace(/\n{3,}/g, '\n\n').trim());
     telegram.href = shareUrl.href;
     telegram.hidden = false;
   }
+  updateShareUrl();
+  document.addEventListener('recipe:scaled', updateShareUrl);
 </script>

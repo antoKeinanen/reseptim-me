@@ -26,6 +26,10 @@ const editUrl = `https://github.com/antoKeinanen/reseptim-me/edit/main/${recipe.
       <header class="recipe-heading">
         <h1>{recipe.data.name}</h1>
         <RecipeMetadata data={recipe.data} />
+        <div class="portion-note" data-portion-note data-share-exclude hidden>
+          <button type="button" class="text-button" data-portion-reset>Palauta alkuperäinen ({recipe.data.portions.toLocaleString('fi-FI')})</button>
+          <p id="portion-help">Valmistusohje ja hintatieto ovat alkuperäiselle annosmäärälle.</p>
+        </div>
       </header>
       <div class="recipe-body"><Content /></div>
       <div class="recipe-actions" data-share-exclude>

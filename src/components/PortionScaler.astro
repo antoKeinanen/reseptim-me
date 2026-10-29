@@ -1,0 +1,72 @@
+---
+type Props = { portions: number };
+const { portions } = Astro.props;
+---
+<span data-portion-display>{portions.toLocaleString('fi-FI')}</span>
+<span class="portion-scaler" data-original-portions={portions} data-share-exclude hidden>
+  <button type="button" data-portion-decrease aria-label="Vähennä annoksia">
+    <svg viewBox="0 0 16 16" width="14" height="14" fill="none" aria-hidden="true"><path d="M3 8h10" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" /></svg>
+  </button>
+  <input id="recipe-portions" type="number" min="0" step="any" value={portions} inputmode="decimal" aria-label="Annoksia" aria-describedby="portion-help" />
+  <button type="button" data-portion-increase aria-label="Lisää annoksia">
+    <svg viewBox="0 0 16 16" width="14" height="14" fill="none" aria-hidden="true"><path d="M3 8h10M8 3v10" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" /></svg>
+  </button>
+  <span class="visually-hidden" aria-live="polite" data-portion-status></span>
+</span>
+<script>
+  import { scaleAmount } from '../lib/scale-amount';
+
+  const scaler = document.querySelector<HTMLElement>('.portion-scaler');
+  const input = document.querySelector<HTMLInputElement>('#recipe-portions');
+  const decrease = document.querySelector<HTMLButtonElement>('[data-portion-decrease]');
+  const increase = document.querySelector<HTMLButtonElement>('[data-portion-increase]');
+  const reset = document.querySelector<HTMLButtonElement>('[data-portion-reset]');
+  const status = document.querySelector<HTMLElement>('[data-portion-status]');
+  const portions = document.querySelector<HTMLElement>('[data-portion-display]');
+  const note = document.querySelector<HTMLElement>('[data-portion-note]');
+  const costLabel = document.querySelector<HTMLElement>('.metadata-cost dt');
+
+  if (scaler && input && decrease && increase && reset && status && portions && note) {
+    const original = Number(scaler.dataset.originalPortions);
+    let current = original;
+    const amounts = Array.from(document.querySelectorAll('[data-ingredient-amount]'), (element) => ({
+      element,
+      text: element.textContent ?? '',
+      content: Array.from(element.childNodes, (node) => node.cloneNode(true)),
+    }));
+
+    const update = (value: number) => {
+      input.setCustomValidity('');
+      if (!Number.isFinite(value) || value <= 0) {
+        input.setCustomValidity('Anna nollaa suurempi annosmäärä.');
+        return;
+      }
+      current = value;
+      amounts.forEach(({ element, text, content }) => {
+        if (value === original) element.replaceChildren(...content.map((node) => node.cloneNode(true)));
+        else element.textContent = scaleAmount(text, value / original);
+      });
+      const formatted = value.toLocaleString('fi-FI');
+      portions.textContent = formatted;
+      if (costLabel) costLabel.textContent = value === original ? 'Hinta' : `Hinta (${original.toLocaleString('fi-FI')} annosta)`;
+      status.textContent = `Ainesmäärät laskettu ${formatted} annokselle.`;
+      decrease.disabled = value <= 1;
+      note.hidden = value === original;
+      document.dispatchEvent(new Event('recipe:scaled'));
+    };
+
+    input.addEventListener('input', () => update(input.valueAsNumber));
+    input.addEventListener('change', () => {
+      if (!input.validity.valid) {
+        input.value = String(current);
+        input.setCustomValidity('');
+      }
+    });
+    decrease.addEventListener('click', () => { input.value = String(Math.max(1, current - 1)); update(input.valueAsNumber); });
+    increase.addEventListener('click', () => { input.value = String(current + 1); update(input.valueAsNumber); });
+    reset.addEventListener('click', () => { input.value = String(original); update(original); });
+    decrease.disabled = original <= 1;
+    portions.hidden = true;
+    scaler.hidden = false;
+  }
+</script>

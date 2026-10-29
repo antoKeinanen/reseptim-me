@@ -49,6 +49,16 @@ h1 { font-size: 40px; letter-spacing: -1.2px; }
 .empty-results h2 { font-size: 24px; margin-bottom: 10px; }
 .empty-results p { color: var(--muted); margin-bottom: 18px; font-family: var(--sans); font-size: 15px; }
 .recipe-actions { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 36px; }
+.recipe-metadata:not(.metadata-compact) > .metadata-portions:has(.portion-scaler:not([hidden])) { align-items: center; padding-block: 0; padding-right: 4px; }
+.metadata-portions dd { display: inline-flex; align-items: center; }
+.portion-scaler { display: inline-flex; align-items: center; }
+.portion-scaler button { display: inline-flex; align-items: center; justify-content: center; width: 32px; height: 36px; padding: 0; border: 0; border-radius: 50%; background: transparent; color: var(--muted); }
+.portion-scaler button:hover:enabled { color: var(--accent); background: var(--hover); }
+.portion-scaler button:disabled { color: var(--rule); cursor: default; }
+.portion-scaler input { width: 3.5ch; min-width: 32px; padding: 0; border: 0; border-radius: 0; background: transparent; color: var(--text); text-align: center; appearance: textfield; font-variant-numeric: tabular-nums; }
+.portion-scaler input::-webkit-inner-spin-button, .portion-scaler input::-webkit-outer-spin-button { appearance: none; margin: 0; }
+.portion-note { margin-top: 12px; font-size: 13px; line-height: 1.6; }
+.portion-note p { color: var(--muted); margin-top: 4px; }
 .recipe-body { max-width: 72ch; margin-top: 40px; font-size: 17px; line-height: 1.75; }
 .recipe-body h2 { font-size: 26px; letter-spacing: -.5px; margin-block: 36px 19px; }
 .recipe-body > :first-child, .recipe-body > :first-child > h2:first-child { margin-top: 0; }
