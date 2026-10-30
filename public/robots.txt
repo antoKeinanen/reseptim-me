@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://reseptim.me/sitemap.xml

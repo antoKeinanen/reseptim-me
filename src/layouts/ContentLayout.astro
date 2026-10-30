@@ -1,11 +1,11 @@
 ---
 import SiteLayout from './SiteLayout.astro';
 
-type Props = { frontmatter: { title: string } };
+type Props = { frontmatter: { title: string; description: string } };
 const { frontmatter } = Astro.props;
 ---
 
-<SiteLayout title={frontmatter.title}>
+<SiteLayout title={frontmatter.title} description={frontmatter.description}>
   <article class="recipe-body">
     <slot />
   </article>

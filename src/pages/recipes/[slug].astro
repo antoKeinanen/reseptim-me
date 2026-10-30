@@ -1,6 +1,7 @@
 ---
 import { getCollection, render, type CollectionEntry } from 'astro:content';
-import { Image } from 'astro:assets';
+import { Image, getImage } from 'astro:assets';
+import { categoryLabels, getDietLabel } from '../../lib/recipe-labels';
 import { getRecipeSlug } from '../../lib/recipes';
 import SiteLayout from '../../layouts/SiteLayout.astro';
 import RecipeMetadata from '../../components/RecipeMetadata.astro';
@@ -20,8 +21,15 @@ const { recipe } = Astro.props;
 const { Content } = await render(recipe);
 if (!recipe.filePath) throw new Error(`Missing Markdown source for recipe "${recipe.id}".`);
 const editUrl = `https://github.com/antoKeinanen/reseptim-me/edit/main/${recipe.filePath.split('/').map(encodeURIComponent).join('/')}`;
+const description = `${recipe.data.name}, ${categoryLabels[recipe.data.category].toLocaleLowerCase('fi-FI')} ${recipe.data.portions.toLocaleString('fi-FI')} annokselle. ${recipe.data.diet.length ? `Ruokavaliot: ${recipe.data.diet.map(getDietLabel).join(', ')}. ` : ''}Skaalaa reseptin ainesmäärät omien sitsiesi vierasmäärään.`;
+const photo = recipe.data.images[0];
+const previewImage = photo ? await getImage({ src: photo.src, width: 1200, format: 'jpeg' }) : undefined;
 ---
-<SiteLayout title={recipe.data.name}>
+<SiteLayout
+  title={`${recipe.data.name} | Sitsireseptit`}
+  description={description}
+  image={photo && previewImage ? { src: previewImage.src, width: Number(previewImage.attributes.width), height: Number(previewImage.attributes.height), alt: photo.alt } : undefined}
+>
   <div class="recipe-page">
     <article data-share-source>
       <header class="recipe-heading">

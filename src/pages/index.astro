@@ -7,7 +7,7 @@ import RecipeMetadata from '../components/RecipeMetadata.astro';
 const recipes = (await getCollection('recipes')).sort((a, b) => a.data.name.localeCompare(b.data.name, 'fi'));
 ---
 <SiteLayout>
-  <h1 class="visually-hidden">Reseptit</h1>
+  <h1 class="visually-hidden">Sitsireseptit ja annoslaskuri</h1>
   <div class="search-area">
     <label for="recipe-search" class="visually-hidden">Hae reseptejä</label>
     <div class="search-field">

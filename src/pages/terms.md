@@ -1,6 +1,7 @@
 ---
 layout: ../layouts/ContentLayout.astro
 title: Sanastoa
+description: Ruoanvalmistuksen sanasto sitsikokille. Tarkista, mitä reseptin ohjeessa tarkoittavat esimerkiksi ryöppääminen, hauduttaminen ja gratinointi.
 ---
 
 # Sanastoa

@@ -1,6 +1,7 @@
 ---
 layout: ../layouts/ContentLayout.astro
 title: Vinkit
+description: Vinkkejä sitsien tarjoilujen suunnitteluun ja ruoan esillepanoon. Suunnittele alkuruoka, pääruoka, jälkiruoka ja buffetpöytä juhlaan sopiviksi.
 ---
 
 # Vinkit keittiöö
