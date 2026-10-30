@@ -92,7 +92,9 @@ alkuperäinen** to restore the recipe's original portions and quantity notation.
 Scaling supports decimal commas and points, fractions such as `1/2`, `½`, and
 `1½`, ranges, and multiple quantities in an `Amount` cell. Scaled metric amounts
 use kg at 1000 g or more, and g below that. Volumes use l at 1000 ml or more,
-dl from 100 ml, and ml below that. A range uses one unit, chosen from its larger
+dl from 50 ml, and ml below that. Teaspoons (`tl`, 5 ml) and tablespoons
+(`rkl`, 15 ml) also switch to dl at 50 ml, and to l at 1000 ml. Smaller spoon
+amounts keep their original unit, including fractional spoons. A range uses one unit, chosen from its larger
 endpoint. Units can appear in either `Amount` or `Unit`. Other units and text
 such as `maun mukaan` stay as written. Ratios with `osa` or `osaa` and rows whose `Note`
 contains `per`, `annosta kohti`, `annosta kohden`, or `/annos` stay unchanged.

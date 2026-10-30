@@ -7,5 +7,5 @@ export default defineConfig({
   markdown: {
     processor: unified({ rehypePlugins: [recipeIngredients] }),
   },
-  site: "reseptim.me",
+  site: "https://reseptim.me",
 });

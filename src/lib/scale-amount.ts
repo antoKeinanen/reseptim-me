@@ -1,4 +1,4 @@
-import { readableMetricQuantity } from './recipe-units.ts';
+import { readableQuantity } from './recipe-units.ts';
 
 const fractions = new Map([
 	['¼', 1 / 4], ['½', 1 / 2], ['¾', 3 / 4], ['⅐', 1 / 7],
@@ -8,7 +8,7 @@ const fractions = new Map([
 	['⅝', 5 / 8], ['⅞', 7 / 8],
 ]);
 const quantity = String.raw`(?:\d+\s+\d+\s*\/\s*\d+|\d+\s*\/\s*\d+|\d*\s*[¼½¾⅐⅑⅒⅓⅔⅕⅖⅗⅘⅙⅚⅛⅜⅝⅞]|\d+(?:[.,]\d+)?)`;
-const measurement = new RegExp(`(${quantity})(\\s*[–—-]\\s*(${quantity}))?(?:\\s*(kg|g|ml|dl|l)(?![\\p{L}\\p{N}]))?`, 'giu');
+const measurement = new RegExp(`(${quantity})(\\s*[–—-]\\s*(${quantity}))?(?:\\s*(kg|g|ml|dl|l|tl|rkl)(?![\\p{L}\\p{N}]))?`, 'giu');
 const numberFormat = new Intl.NumberFormat('fi-FI', { maximumSignificantDigits: 4, useGrouping: false });
 
 function parseQuantity(match: string): number | undefined {
@@ -36,7 +36,7 @@ export function scaleAmount(amount: string, factor: number): string {
 			return value === undefined ? NaN : value * factor;
 		});
 		if (!values.every(Number.isFinite)) return match;
-		const converted = readableMetricQuantity(values, unit ?? '');
+		const converted = readableQuantity(values, unit ?? '');
 		const separator = range && second ? range.slice(0, -second.length) : '';
 		const formatted = converted.values.map((value) => numberFormat.format(value)).join(separator);
 		const leadingSpace = first.match(/^\s*/)?.[0] ?? '';
