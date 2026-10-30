@@ -82,7 +82,7 @@ h1 { font-size: 40px; letter-spacing: -1.2px; }
   .site-shell { width: calc(100% - 40px); }
   .site-header { padding-block: 30px 42px; gap: 16px; }
   .brand { font-size: 23px; gap: 7px; }
-  .brand img { width: 64px; height: 64px; }
+  .brand img { width: 91px; height: 64px; }
   .site-nav { gap: 12px; font-size: 14px; }
   h1 { font-size: 33px; letter-spacing: -.8px; }
   .search-field { padding: 13px; gap: 10px; }
