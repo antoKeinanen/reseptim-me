@@ -42,6 +42,10 @@ h1 { font-size: 40px; letter-spacing: -1.2px; }
 .recipe-metadata dd { overflow-wrap: anywhere; }
 .metadata-pricing { margin-top: 8px; }
 .recipe-heading h1 { margin-bottom: 24px; overflow-wrap: anywhere; }
+.recipe-images { display: grid; gap: 24px; max-width: 72ch; margin-top: 32px; }
+.recipe-images figure { min-width: 0; margin: 0; }
+.recipe-images img { display: block; width: 100%; height: auto; border-radius: 5px; }
+.recipe-images figcaption { margin-top: 8px; color: var(--muted); font-size: 14px; overflow-wrap: anywhere; }
 .metadata-compact { display: flex; flex-wrap: wrap; gap: 4px 16px; font-size: 14px; color: var(--muted); }
 .metadata-compact > div { display: block; }
 .metadata-compact .metadata-diet { flex-basis: 100%; }

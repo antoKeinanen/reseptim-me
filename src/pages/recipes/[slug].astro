@@ -1,5 +1,6 @@
 ---
 import { getCollection, render, type CollectionEntry } from 'astro:content';
+import { Image } from 'astro:assets';
 import { getRecipeSlug } from '../../lib/recipes';
 import SiteLayout from '../../layouts/SiteLayout.astro';
 import RecipeMetadata from '../../components/RecipeMetadata.astro';
@@ -31,6 +32,16 @@ const editUrl = `https://github.com/antoKeinanen/reseptim-me/edit/main/${recipe.
           <p id="portion-help">Valmistusohje ja hintatieto ovat alkuperäiselle annosmäärälle.</p>
         </div>
       </header>
+      {recipe.data.images.length > 0 && (
+        <div class="recipe-images" data-share-exclude>
+          {recipe.data.images.map((image, index) => (
+            <figure>
+              <Image src={image.src} alt={image.alt} layout="constrained" width={1000} loading={index === 0 ? 'eager' : 'lazy'} />
+              {image.caption && <figcaption>{image.caption}</figcaption>}
+            </figure>
+          ))}
+        </div>
+      )}
       <div class="recipe-body"><Content /></div>
       <div class="recipe-actions" data-share-exclude>
         <ShareRecipe />

@@ -4,8 +4,13 @@ import { z } from 'astro/zod';
 
 const recipes = defineCollection({
 	loader: glob({ pattern: '*.md', base: './recipes' }),
-	schema: z.object({
+	schema: ({ image }) => z.object({
 		name: z.string().trim().min(1),
+		images: z.array(z.object({
+			src: image(),
+			alt: z.string().trim().min(1),
+			caption: z.string().trim().min(1).optional(),
+		})).default([]),
 		author: z.string().trim().default(''),
 		category: z.enum(['starter', 'main', 'dessert', 'other']),
 		portions: z.number().positive(),

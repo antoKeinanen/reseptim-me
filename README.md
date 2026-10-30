@@ -58,7 +58,7 @@ dateOfCost: "2026-10-29"
 2. Simmer the tomatoes and toss with the pasta.
 ```
 
-All frontmatter fields except `author` are required:
+The fields above are required except `author`:
 
 - Set `name` to the recipe's name.
 - Set `author` to the original recipe creator's name. Leave it blank or omit it if the creator is unknown.
@@ -81,6 +81,39 @@ Astro converts names to lowercase, removes accents, and replaces punctuation and
 spaces with hyphens. Each name must produce a unique, nonempty URL slug.
 Invalid frontmatter, empty slugs, and duplicate slugs fail the build.
 Renaming a recipe changes its URL.
+
+## Add recipe photos
+
+Store photos in `recipes/images/` and list them in the recipe's frontmatter.
+Use paths relative to the Markdown file:
+
+```yaml
+images:
+  - src: ./images/tomato-pasta.jpg
+    alt: Tomato pasta topped with fresh basil
+    caption: Ready to serve
+  - src: ./images/tomato-pasta-sauce.jpg
+    alt: Tomato sauce simmering in a pan
+```
+
+Use JPEG, PNG, WebP, or AVIF files. Each photo needs an `alt` description.
+Add `caption` for text below a photo.
+
+Astro optimizes the photos during the build. Missing files or blank `alt`
+descriptions fail the build.
+
+Photos appear in list order above the ingredients. Search cards show only
+recipe text and metadata. Omit `images` or use `images: []` for a recipe
+without photos.
+
+To place a photo within the instructions, use Markdown:
+
+```markdown
+![Tomato sauce simmering in a pan](./images/tomato-pasta-sauce.jpg)
+```
+
+Telegram shares the recipe text and page URL. It omits the photos and captions
+from the `images` list.
 
 ## Adjust portions
 
